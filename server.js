@@ -18,9 +18,11 @@ const Event = require('./models/event.js');
     const port = process.env.PORT;
 
     const app = new express();
+    const router = require('./router.js');
 
     app.use(cors());
     app.use(express.json());
+    app.use("/api/v1", router);
 
     app.use((err, req, res, next) => {
         res.status(500).send({
