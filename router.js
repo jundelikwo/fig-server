@@ -1,6 +1,6 @@
 const express = require('express');
 const { check } = require('express-validator');
-const { addEvent, fetchEvents, deleteEvent } = require('./controllers/event');
+const { addEvent, fetchEvents, deleteEvent, updateEvent } = require('./controllers/event');
 
 const router = express.Router();
 
@@ -13,7 +13,15 @@ router.post("/events", [
     check('date').isString().isLength({ min: 1 }),
 ], addEvent)
     .get("/events", fetchEvents)
-    .delete("/events/:id", deleteEvent);
+    .delete("/events/:id", deleteEvent)
+    .put("/events/:id", [
+        check('title').isString().isLength({ min: 1 }),
+        check('description').isString().isLength({ min: 1 }),
+        check('category').isString().isLength({ min: 1 }),
+        check('address').isString().isLength({ min: 1 }),
+        check('isVirtual').isBoolean(),
+        check('date').isString().isLength({ min: 1 }),
+    ], updateEvent);
 
 router.use((_req, res) => {
     res.status(500).send({

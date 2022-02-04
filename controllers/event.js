@@ -77,8 +77,57 @@ const deleteEvent = (req, res) => {
     });
 };
 
+const updateEvent = (req, res) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    var eventId = req.params.id;
+
+    const {
+        title,
+        description,
+        category,
+        date,
+        isVirtual,
+        address,
+    } = req.body;
+
+    var body = {
+        title,
+        description,
+        category,
+        date,
+        isVirtual,
+        address,
+    };
+
+    Event.findOneAndUpdate({
+        _id: eventId,
+    }, body, {
+        new: true
+    }).then(event => {
+        if (!event) {
+            return res.status(404).json({
+                success: false,
+                msg: "Event not found",
+            });
+        }
+
+        res.json({
+            success: true,
+            msg: 'Event updated successfully',
+            data: event,
+        });
+    }).catch(err => {
+        res.status(400).send(err); //400 bad request
+    });
+};
+
 module.exports = {
     addEvent,
     fetchEvents,
     deleteEvent,
+    updateEvent,
 };
