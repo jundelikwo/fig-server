@@ -1,8 +1,7 @@
 const { validationResult } = require("express-validator");
 const Event = require("../models/event");
 
-
-const addEvent = (req, res, next) => {
+const addEvent = (req, res) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -38,6 +37,19 @@ const addEvent = (req, res, next) => {
     });
 };
 
+const fetchEvents = (_req, res) => {
+    Event.find().then(events => {
+        res.json({
+            success: true,
+            msg: 'Events added successfully',
+            data: events,
+        });
+    }).catch(err => {
+        res.status(400).send(err); //400 bad request
+    });
+};
+
 module.exports = {
     addEvent,
+    fetchEvents,
 };

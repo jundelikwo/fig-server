@@ -1,6 +1,6 @@
 const express = require('express');
 const { check } = require('express-validator');
-const { addEvent } = require('./controllers/event');
+const { addEvent, fetchEvents } = require('./controllers/event');
 
 const router = express.Router();
 
@@ -11,9 +11,10 @@ router.post("/events", [
     check('address').isString().isLength({ min: 1 }),
     check('isVirtual').isBoolean(),
     check('date').isString().isLength({ min: 1 }),
-], addEvent);
+], addEvent)
+    .get("/events", fetchEvents);
 
-router.use((req, res, next) => {
+router.use((_req, res) => {
     res.status(500).send({
         success: false,
         msg: 'Route not found',
