@@ -2,32 +2,35 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 
-const {
-    client
-} = require("./db/client.js");
+const mongoose = require('mongoose');
 
-const port = process.env.PORT;
+mongoose.Promise = global.Promise;
+const Event = require('./models/event.js');
 
-const app = new express();
+(async function() {
+    try {
+        await mongoose.connect(process.env.MONGODB_URI);
+        console.log('Connected to Database');
+    } catch (error) {
+        console.error(error);
+    }
 
-app.use(cors());
-app.use(express.json());
+    const port = process.env.PORT;
 
-app.use((req, res, next) => {
-    res.status(500).send({
-        success: false,
-        msg: 'Route not found',
+    const app = new express();
+
+    app.use(cors());
+    app.use(express.json());
+
+    app.use((err, req, res, next) => {
+        res.status(500).send({
+            success: false,
+            msg: 'Something went wrong',
+        });
     });
-});
 
-app.use((err, req, res, next) => {
-    res.status(500).send({
-        success: false,
-        msg: 'Something went wrong',
-    });
-});
+    console.log(`Server running on ${port}`);
 
-console.log(`Server running on ${port}`);
-
-app.listen(port);
+    app.listen(port);
+}());
 
