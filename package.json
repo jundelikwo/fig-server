@@ -1,8 +1,13 @@
 {
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "jest"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "expect": "^27.4.6",
+    "mocha": "^9.2.0",
+    "supertest": "^6.2.2"
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",

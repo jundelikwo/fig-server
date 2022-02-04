@@ -5,7 +5,10 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
-const Event = require('./models/event.js');
+
+const port = process.env.PORT;
+
+const app = new express();
 
 (async function() {
     try {
@@ -15,9 +18,6 @@ const Event = require('./models/event.js');
         console.error(error);
     }
 
-    const port = process.env.PORT;
-
-    const app = new express();
     const router = require('./router.js');
 
     app.use(cors());
@@ -35,4 +35,8 @@ const Event = require('./models/event.js');
 
     app.listen(port);
 }());
+
+module.exports = {
+    app,
+};
 
